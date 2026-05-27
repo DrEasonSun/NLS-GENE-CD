@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NLS GENE｜專屬健康評估 (FEATERA 科技版)</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <!-- CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- ★ EmailJS v4 CDN (browser bundle) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
   <style>
     :root{
@@ -117,6 +120,7 @@
 
 <footer class="text-center text-muted my-4">&copy; 2026 NLS GENE ｜ 系統規劃: 孫苓獻博士</footer>
 
+<!-- 確認用 Modal -->
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
@@ -133,14 +137,19 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- JS -->
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
+<script defer>
 document.addEventListener("DOMContentLoaded",()=>{
 
   /* ---------- 快捷 ---------- */
-  const $=id=>document.getElementById(id);
-  const setDisabled=(el,flag)=>{ el.disabled=flag; flag?el.setAttribute('disabled',''):el.removeAttribute('disabled'); };
+  const $ = id => document.getElementById(id);
+  const setDisabled = (el,flag)=>{
+    if(!el) return;
+    el.disabled = flag;
+    flag ? el.setAttribute('disabled','') : el.removeAttribute('disabled');
+  };
 
   /* ---------- 原始資料 ---------- */
   const organCommon=["闌尾","扁桃腺","膽囊","甲狀腺","左腎","右腎","左眼","右眼","左上肺葉","左下肺葉","右上肺葉","右中肺葉","右下肺葉","左臂","右臂","左下臂","右下臂","左手","右手","左腿","右腿","左小腿","右小腿","左腳","右腳"];
@@ -154,7 +163,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   const build=(cid,list)=>{
     const c=$(cid); c.innerHTML="";
     list.forEach(t=>{
-      const k=`${cid}_${t}`;
+      const k=`${cid}_${t.replace(/\\s+/g,'_')}`;  /* ★ id 避免空白 */
       c.insertAdjacentHTML('beforeend',`
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="checkbox" id="${k}" value="${t}" name="${cid}">
@@ -173,6 +182,14 @@ document.addEventListener("DOMContentLoaded",()=>{
     const sym=[...symptomCommon,...(g==="女"?symptomF:[]),...(g==="男"?symptomM:[]),"其他"];
     build("symptoms_group",sym);
     bindOther();
+    /* reset step states */
+    steps.forEach(sid=>{
+      $(sid+"_display").textContent="尚未選擇";
+      $(sid+"_confirm").disabled=true;
+      $(sid+"_group").querySelectorAll('input').forEach(el=>setDisabled(el,true));
+    });
+    /* 開放第一步 */
+    $(steps[0]+"_group").querySelectorAll('input').forEach(el=>setDisabled(el,false));
   };
 
   /* ---------- 其他輸入顯示 ---------- */
@@ -180,7 +197,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   const bindOther=()=>{            // 每次重建後重新掛
     Object.entries(otherWrap).forEach(([key,wrap])=>{
       const g=$(key+"_group");
-      g.onchange=()=>setDisplay(wrap,[...g.querySelectorAll('input:checked')].some(i=>i.value==="其他"));
+      g.onchange=()=>{
+        const show=[...g.querySelectorAll('input:checked')].some(i=>i.value==="其他");
+        setDisplay(wrap,show);
+        /* 若有選擇，開啟確認按鈕 */
+        $(key+"_confirm").disabled = [...g.querySelectorAll('input:checked')].length===0;
+      };
     });
   };
   const setDisplay=(id,show)=>$(id).classList.toggle("d-none",!show);
@@ -189,8 +211,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   const lockAllAfterBirth=(flag)=>{
     setDisabled($("bloodtype"),flag);
     setDisabled($("client_email"),flag);
-    const firstEls=[...$("removed_organs_group").querySelectorAll('input'),$("removed_organs_confirm")];
-    firstEls.forEach(e=>setDisabled(e,flag));
+    /* 第一步群組 */
+    $("removed_organs_group").querySelectorAll('input').forEach(e=>setDisabled(e,flag));
+    setDisabled($("removed_organs_confirm"),flag);
     if(flag) $("submitBtn").disabled=true;
   };
   // disable everything initially
@@ -203,19 +226,28 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("name").addEventListener("input",e=>{
     const ok=e.target.value.trim().length>0;
     setDisabled($("gender"),!ok);
-    if(!ok){ $("gender").value=""; setDisabled($("birthdate"),true); lockAllAfterBirth(true);}
+    if(!ok){
+      $("gender").value="";
+      setDisabled($("birthdate"),true);
+      lockAllAfterBirth(true);
+    }
   });
 
   /* ---------- 性別 ---------- */
   $("gender").addEventListener("change",()=>{
     const chose=!!$("gender").value;
     setDisabled($("birthdate"),!chose);
-    if(chose) refreshByGender();u
+    if(chose) refreshByGender();
     else{ setDisabled($("birthdate"),true); lockAllAfterBirth(true);}
   });
 
   /* ---------- 年齡驗證 ---------- */
-  const ageOK=()=>{ const v=$("birthdate").value;if(!v)return false; return ((Date.now()-new Date(v))/31557600000)>=2; };
+  const ageOK=()=>{ 
+    const v=$("birthdate").value;
+    if(!v) return false;
+    const diff=Date.now()-new Date(v).getTime();
+    return diff/31557600000>=2;
+  };
 
   $("birthdate").addEventListener("input",()=>{
     const v=$("birthdate").value;
@@ -236,20 +268,32 @@ document.addEventListener("DOMContentLoaded",()=>{
     const grp=$(sid+"_group"), btn=$(sid+"_confirm"), disp=$(sid+"_display");
     btn.onclick=()=>{
       const checked=[...grp.querySelectorAll('input:checked')].map(x=>x.value);
+      if(!checked.length){ alert("請至少選擇一項"); return; }
+
       if(checked.includes("其他")){
         const extra=$(otherWrap[sid]).querySelector("input").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean);
         checked.splice(checked.indexOf("其他"),1,...extra);
       }
-      store[sid]=checked; disp.textContent=checked.length?checked.join("，"):"（未選取）";
-      grp.querySelectorAll('input').forEach(x=>x.disabled=true); btn.disabled=true;
-      const nxt=steps[i+1]; if(nxt){ document.querySelectorAll(`#${nxt}_group input, #${nxt}_confirm`).forEach(el=>setDisabled(el,false)); }
-      else $("submitBtn").disabled=false;
+      store[sid]=checked;
+      disp.textContent=checked.length?checked.join("，"):"（未選取）";
+
+      /* 鎖定當前步驟 */
+      grp.querySelectorAll('input').forEach(x=>setDisabled(x,true));
+      btn.disabled=true;
+
+      /* 開啟下一步 */
+      const nxt=steps[i+1];
+      if(nxt){
+        document.querySelectorAll(`#${nxt}_group input, #${nxt}_confirm`).forEach(el=>setDisabled(el,false));
+      }else{
+        $("submitBtn").disabled=false;
+      }
     };
   });
 
   /* ---------- EmailJS ---------- */
-  emailjs.init("YOUR_PUBLIC_KEY");
-  const SERVICE="drlingxiansun@gmail.com"; const TEMPLATE="template_o3yrt3o"; const EMAILJS_PUBLIC_KEY = "eLWd9BxdODbpLnR43";
+  emailjs.init("eLWd9BxdODbpLnR43");
+  const SERVICE="drlingxiansun@gmail.com", TEMPLATE="template_o3yrt3o";
   const modal=new bootstrap.Modal("#confirmModal"); let finalData=null;
 
   $("clientForm").addEventListener("submit",e=>{
