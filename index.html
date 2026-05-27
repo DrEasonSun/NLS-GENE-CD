@@ -67,6 +67,10 @@
           <option value="">--</option><option>A</option><option>B</option><option>AB</option><option>O</option>
         </select>
       </div>
+      <div class="col-md-8">
+        <label class="form-label required">專屬精準健康評估報告 ‧ 收件信箱 (email)</label>
+        <input class="form-control" type="email" id="client_email" name="client_email" placeholder="name@example.com" required disabled/>
+      </div>
 
       <!-- ====== 1. 器官摘除 ====== -->
       <div class="col-12">
@@ -117,7 +121,7 @@
   </form>
 </div>
 
-<footer class="text-center text-muted my-4">&copy; 2026 NLS GENE ｜ 系統規劃 孫苓獻博士</footer>
+<footer class="text-center text-muted my-4">&copy; 2026 NLS GENE ｜ 系統規劃: 孫苓獻博士</footer>
 
 <!-- ===== 總確認 Modal ===== -->
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -142,7 +146,6 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   /* ---------- 選項資料 ---------- */
-  // 1) 器官
   const organCommon = ["闌尾","扁桃腺","膽囊","甲狀腺","左腎","右腎","左眼","右眼",
                        "左上肺葉","左下肺葉","右上肺葉","右中肺葉","右下肺葉",
                        "左臂","右臂","左下臂","右下臂","左手","右手","左腿","右腿",
@@ -150,26 +153,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const organFemaleOnly = ["左乳","右乳","左卵巢輸卵管","右卵巢輸卵管","子宮"];
   const organMaleOnly   = ["前列腺","左睪","右睪"];
 
-  // 2) 疾病（家族/個人）
   const diseaseCommon = ["糖尿病","高血壓","心臟病","高血脂","甲狀腺疾病","慢性肝病",
                          "慢性腎病","中風","癌症","自體免疫病","氣喘","過敏性鼻炎",
                          "憂鬱症","骨質疏鬆","失智症","痛風","胃潰瘍","肥胖","乾癬"];
   const diseaseFemaleOnly = ["婦科疾病","乳癌"];
   const diseaseMaleOnly   = ["攝護腺肥大"];
-  // 3) 症狀
+
   const symptomCommon = ["疲勞","失眠","頭痛","眩暈","背痛","關節痛","便秘","腹瀉",
                          "胃脹氣","皮膚乾癢","過敏","情緒低落","焦慮","手腳冰冷","心悸",
                          "呼吸急促","口乾","肌肉痠痛","體重增加","體重減輕"];
   const symptomFemaleOnly = ["經前不適","經期不規則"];
   const symptomMaleOnly   = ["夜間頻尿"];
 
-  /* ---------- DOM 便捷存取 ---------- */
   const nameInput  = document.getElementById("name");
   const genderSel  = document.getElementById("gender");
   const birthInput = document.getElementById("birthdate");
   const bloodSel   = document.getElementById("bloodtype");
+  const emailInput = document.getElementById("client_email");
 
-  /* ---------- 建立 checkbox 群組 ---------- */
   function createCheckboxGroup(containerId, options){
     const container = document.getElementById(containerId);
     container.innerHTML = "";
@@ -186,7 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- 根據性別重建三個群組 ---------- */
   function rebuildGenderSpecificGroups(){
     const g = genderSel.value;
     const organs = organCommon
@@ -203,15 +203,13 @@ document.addEventListener("DOMContentLoaded", () => {
           .concat("其他");
 
     createCheckboxGroup("removed_organs_group", organs);
-    createCheckboxGroup("family_history_group", diseases);      // 家族病史(男女通用) 無需過濾
+    createCheckboxGroup("family_history_group", diseases);
     createCheckboxGroup("personal_history_check_group", diseases);
     createCheckboxGroup("symptoms_group", symptoms);
 
-    // 重新掛 event（因為元素被重建）
     attachOtherInputsHandler();
   }
 
-  /* ---------- 「其他」輸入框顯示控制 ---------- */
   const otherMap = {
     removed_organs: "removed_organs_other_wrapper",
     family_history: "family_other_wrapper",
@@ -229,44 +227,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- 初始：僅填姓名，其餘 disable ---------- */
-  ["gender","birthdate","bloodtype"].forEach(id=>{
+  ["gender","birthdate","bloodtype","client_email"].forEach(id=>{
     document.getElementById(id).disabled = true;
   });
-  // 四個步驟全部 disable
   ["removed_organs","family_history","personal_history_check","symptoms"].forEach(sid=>{
     document.querySelectorAll(`#${sid}_group input, #${sid}_confirm`).forEach(el=>el.disabled=true);
   });
 
-  // 預先建立空群組（避免版面跳動），待性別確定後再重建
   createCheckboxGroup("removed_organs_group",[]);
   createCheckboxGroup("family_history_group",[]);
   createCheckboxGroup("personal_history_check_group",[]);
   createCheckboxGroup("symptoms_group",[]);
   attachOtherInputsHandler();
 
-  /* ---------- 姓名輸入 → 啟用性別 ---------- */
   nameInput.addEventListener("input",()=>{
     genderSel.disabled = nameInput.value.trim()==="";
   });
 
-  /* ---------- 性別變更：啟用生日 & 重建性別專屬選項 ---------- */
   genderSel.addEventListener("change",()=>{
     const g = genderSel.value;
     birthInput.disabled = !g;
     if(g){ rebuildGenderSpecificGroups(); }
   });
 
-  /* ---------- 出生年月日輸入 → 啟用血型 & 第一步群組 ---------- */
   birthInput.addEventListener("input",()=>{
     const ok = !!birthInput.value;
     bloodSel.disabled = !ok;
-    // 啟用第一步
+    emailInput.disabled = !ok;
     document.querySelectorAll(`#removed_organs_group input, #removed_organs_confirm`)
             .forEach(el=>el.disabled=!ok);
   });
 
-  /* ---------- 步驟控制（四大組） ---------- */
   const steps = ["removed_organs","family_history","personal_history_check","symptoms"];
   const selectionsData={};
   steps.forEach((sid,idx)=>{
@@ -285,11 +276,9 @@ document.addEventListener("DOMContentLoaded", () => {
       selectionsData[sid]=checked;
       display.textContent=checked.length?checked.join("，"):"（未選取）";
 
-      // 鎖定本步
       groupElem.querySelectorAll('input[type="checkbox"]').forEach(i=>i.disabled=true);
       btn.disabled=true; otherInput.disabled=true;
 
-      // 下一步
       if(idx+1<steps.length){
         const next=steps[idx+1];
         document.querySelectorAll(`#${next}_group input, #${next}_confirm`).forEach(el=>el.disabled=false);
@@ -299,19 +288,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* ---------- 生日合法性再檢查 ---------- */
   birthInput.addEventListener("input",()=>{
     birthInput.setCustomValidity(birthInput.value && birthInput.value<"1900-01-01"
       ?"日期不可早於 1900-01-01":"");
   });
 
-  /* ---------- EmailJS ---------- */
   const EMAILJS_SERVICE_ID = "drlingxiansun@gmail.com";
   const EMAILJS_TEMPLATE_ID = "template_o3yrt3o";
   const EMAILJS_PUBLIC_KEY = "eLWd9BxdODbpLnR43";
   emailjs.init(EMAILJS_PUBLIC_KEY);
 
-  /* ---------- 送出前總確認 ---------- */
   const confirmModal=new bootstrap.Modal("#confirmModal");
   let finalPayload=null;
   document.getElementById("clientForm").addEventListener("submit",e=>{
@@ -321,6 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
       gender: genderSel.value,
       birthdate: birthInput.value,
       bloodtype: bloodSel.value,
+      client_email: emailInput.value.trim(),
       ...selectionsData
     };
     document.getElementById("confirmContent").textContent=
@@ -328,7 +315,6 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmModal.show();
   });
 
-  /* ---------- 確認寄送 ---------- */
   document.getElementById("btnConfirmSend").addEventListener("click",async()=>{
     if(!finalPayload) return;
     try{
@@ -336,10 +322,11 @@ document.addEventListener("DOMContentLoaded", () => {
         subject:`客戶名稱 ${finalPayload.name||"客戶"} 輸入資料`,
         to_email:"drlingxiansun@gmail.com",
         message:JSON.stringify(finalPayload,null,2),
+        client_email: finalPayload.client_email
       });
       confirmModal.hide();
       alert("資料已成功寄出，感謝填寫！");
-      location.reload(); // 重新整理直接重設
+      location.reload();
     }catch(err){
       console.error(err);
       alert("寄信失敗："+(err.text||err));
