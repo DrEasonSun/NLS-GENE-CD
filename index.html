@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NLS GENE｜專屬健康評估 (FEATERA 科技版)</title>
 
-  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
-  <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
   <style>
@@ -18,11 +15,9 @@
       --bg-main:#f4f9f5;--text-main:#2c3e2d;
     }
     body{background:var(--bg-main);font-family:"Helvetica Neue",Arial,"Microsoft JhengHei",sans-serif;color:var(--text-main);}
-    header{
-      background:linear-gradient(135deg,var(--header-dark),var(--header-light));
-      color:#fff;padding:50px 40px 60px;text-align:center;border-bottom:6px solid var(--header-gold);
-      box-shadow:0 4px 12px rgba(0,0,0,.15);
-    }
+    header{background:linear-gradient(135deg,var(--header-dark),var(--header-light));color:#fff;
+      padding:50px 40px 60px;text-align:center;border-bottom:6px solid var(--header-gold);
+      box-shadow:0 4px 12px rgba(0,0,0,.15);}
     .logo-text{font-size:2.4rem;font-weight:900;margin-bottom:8px;}
     .logo-feat{color:var(--header-gold);} .logo-era{color:var(--brand-orange);}
     .container-box{max-width:960px;margin:-40px auto 60px;background:#fff;border-radius:12px;
@@ -35,21 +30,19 @@
   </style>
 </head>
 <body>
-<!-- ===== Header ===== -->
 <header>
   <div class="logo-text"><span class="logo-feat">NLS</span><span class="logo-era">GENE</span></div>
   <h2 class="h4 mb-0">基因檢測精準健康評估</h2>
-  <p class="text-light">NLS 建模：孫苓獻醫師 TCMD/ND/PhD</p>
+  <p class="text-light">NLS 建模：孫苓獻 TCMD / ND / PhD</p>
 </header>
 
-<!-- ===== Form Card ===== -->
 <div class="container-box">
   <form id="clientForm">
     <div class="row g-3">
-      <!-- 基本資料（依序輸入） -->
+      <!-- 基本資料 -->
       <div class="col-md-6">
         <label class="form-label required">姓名</label>
-        <input class="form-control" type="text" id="name" name="name" placeholder="請輸入姓名" required />
+        <input class="form-control" id="name" name="name" required placeholder="請輸入姓名">
       </div>
       <div class="col-md-3">
         <label class="form-label required">性別</label>
@@ -59,7 +52,7 @@
       </div>
       <div class="col-md-3">
         <label class="form-label required">出生年月日</label>
-        <input class="form-control" type="date" id="birthdate" name="birthdate" min="1900-01-01" required disabled/>
+        <input class="form-control" type="date" id="birthdate" name="birthdate" min="1900-01-01" required disabled>
       </div>
       <div class="col-md-4">
         <label class="form-label">血型</label>
@@ -69,7 +62,8 @@
       </div>
       <div class="col-md-8">
         <label class="form-label required">專屬精準健康評估報告 ‧ 收件信箱 (email)</label>
-        <input class="form-control" type="email" id="client_email" name="client_email" placeholder="name@example.com" required disabled/>
+        <input class="form-control" type="email" id="client_email" name="client_email" required
+               placeholder="name@example.com" disabled>
       </div>
 
       <!-- ====== 1. 器官摘除 ====== -->
@@ -77,7 +71,7 @@
         <label class="form-label">曾摘除器官</label>
         <div id="removed_organs_group" class="d-flex flex-wrap gap-2"></div>
         <div id="removed_organs_other_wrapper" class="mt-2 d-none">
-          <input class="form-control" id="removed_organs_other" placeholder="請輸入其他 (以逗號分隔)" />
+          <input class="form-control" id="removed_organs_other" placeholder="請輸入其他 (以逗號分隔)">
         </div>
         <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="removed_organs_confirm" disabled>確認此項</button>
         <div class="select-footer">已選擇：<span id="removed_organs_display">尚未選擇</span></div>
@@ -88,7 +82,7 @@
         <label class="form-label">家族病史</label>
         <div id="family_history_group" class="d-flex flex-wrap gap-2"></div>
         <div id="family_other_wrapper" class="mt-2 d-none">
-          <input class="form-control" id="family_other" placeholder="請輸入其他 (以逗號分隔)" />
+          <input class="form-control" id="family_other" placeholder="請輸入其他 (以逗號分隔)">
         </div>
         <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="family_history_confirm" disabled>確認此項</button>
         <div class="select-footer">已選擇：<span id="family_history_display">尚未選擇</span></div>
@@ -99,7 +93,7 @@
         <label class="form-label">個人病史</label>
         <div id="personal_history_check_group" class="d-flex flex-wrap gap-2"></div>
         <div id="personal_other_wrapper" class="mt-2 d-none">
-          <input class="form-control" id="personal_other" placeholder="請輸入其他 (以逗號分隔)" />
+          <input class="form-control" id="personal_other" placeholder="請輸入其他 (以逗號分隔)">
         </div>
         <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="personal_history_check_confirm" disabled>確認此項</button>
         <div class="select-footer">已選擇：<span id="personal_history_check_display">尚未選擇</span></div>
@@ -110,7 +104,7 @@
         <label class="form-label">自訴症狀</label>
         <div id="symptoms_group" class="d-flex flex-wrap gap-2"></div>
         <div id="symptoms_other_wrapper" class="mt-2 d-none">
-          <input class="form-control" id="symptoms_other" placeholder="請輸入其他 (以逗號分隔)" />
+          <input class="form-control" id="symptoms_other" placeholder="請輸入其他 (以逗號分隔)">
         </div>
         <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="symptoms_confirm" disabled>確認此項</button>
         <div class="select-footer">已選擇：<span id="symptoms_display">尚未選擇</span></div>
@@ -123,7 +117,6 @@
 
 <footer class="text-center text-muted my-4">&copy; 2026 NLS GENE ｜ 系統規劃: 孫苓獻博士</footer>
 
-<!-- ===== 總確認 Modal ===== -->
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
@@ -140,198 +133,146 @@
   </div>
 </div>
 
-<!-- Bootstrap Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  /* ---------- 選項資料 ---------- */
-  const organCommon = ["闌尾","扁桃腺","膽囊","甲狀腺","左腎","右腎","左眼","右眼",
-                       "左上肺葉","左下肺葉","右上肺葉","右中肺葉","右下肺葉",
-                       "左臂","右臂","左下臂","右下臂","左手","右手","左腿","右腿",
-                       "左小腿","右小腿","左腳","右腳"];
-  const organFemaleOnly = ["左乳","右乳","左卵巢輸卵管","右卵巢輸卵管","子宮"];
-  const organMaleOnly   = ["前列腺","左睪","右睪"];
+document.addEventListener("DOMContentLoaded",()=>{
 
-  const diseaseCommon = ["糖尿病","高血壓","心臟病","高血脂","甲狀腺疾病","慢性肝病",
-                         "慢性腎病","中風","癌症","自體免疫病","氣喘","過敏性鼻炎",
-                         "憂鬱症","骨質疏鬆","失智症","痛風","胃潰瘍","肥胖","乾癬"];
-  const diseaseFemaleOnly = ["婦科疾病","乳癌"];
-  const diseaseMaleOnly   = ["攝護腺肥大"];
+  /* ---------- 快捷 ---------- */
+  const $=id=>document.getElementById(id);
+  const setDisabled=(el,flag)=>{ el.disabled=flag; flag?el.setAttribute('disabled',''):el.removeAttribute('disabled'); };
 
-  const symptomCommon = ["疲勞","失眠","頭痛","眩暈","背痛","關節痛","便秘","腹瀉",
-                         "胃脹氣","皮膚乾癢","過敏","情緒低落","焦慮","手腳冰冷","心悸",
-                         "呼吸急促","口乾","肌肉痠痛","體重增加","體重減輕"];
-  const symptomFemaleOnly = ["經前不適","經期不規則"];
-  const symptomMaleOnly   = ["夜間頻尿"];
+  /* ---------- 原始資料 ---------- */
+  const organCommon=["闌尾","扁桃腺","膽囊","甲狀腺","左腎","右腎","左眼","右眼","左上肺葉","左下肺葉","右上肺葉","右中肺葉","右下肺葉","左臂","右臂","左下臂","右下臂","左手","右手","左腿","右腿","左小腿","右小腿","左腳","右腳"];
+  const organF=["左乳","右乳","左卵巢輸卵管","右卵巢輸卵管","子宮"], organM=["前列腺","左睪","右睪"];
+  const diseaseCommon=["糖尿病","高血壓","心臟病","高血脂","甲狀腺疾病","慢性肝病","慢性腎病","中風","癌症","自體免疫病","氣喘","過敏性鼻炎","憂鬱症","骨質疏鬆","失智症","痛風","胃潰瘍","肥胖","乾癬"];
+  const diseaseF=["婦科疾病","乳癌"], diseaseM=["攝護腺肥大"];
+  const symptomCommon=["疲勞","失眠","頭痛","眩暈","背痛","關節痛","便秘","腹瀉","胃脹氣","皮膚乾癢","過敏","情緒低落","焦慮","手腳冰冷","心悸","呼吸急促","口乾","肌肉痠痛","體重增加","體重減輕"];
+  const symptomF=["經前不適","經期不規則"], symptomM=["夜間頻尿"];
 
-  const nameInput  = document.getElementById("name");
-  const genderSel  = document.getElementById("gender");
-  const birthInput = document.getElementById("birthdate");
-  const bloodSel   = document.getElementById("bloodtype");
-  const emailInput = document.getElementById("client_email");
-
-  function createCheckboxGroup(containerId, options){
-    const container = document.getElementById(containerId);
-    container.innerHTML = "";
-    options.forEach(opt=>{
-      const id = `${containerId}_${opt}`;
-      const w = document.createElement("div");
-      w.className = "form-check form-check-inline";
-      const inp = document.createElement("input");
-      inp.type="checkbox";inp.className="form-check-input";inp.id=id;inp.value=opt;inp.name=containerId;
-      const lab = document.createElement("label");
-      lab.className="form-check-label";lab.setAttribute("for",id);lab.textContent=opt;
-      w.appendChild(inp);w.appendChild(lab);
-      container.appendChild(w);
+  /* ---------- 建立群組 ---------- */
+  const build=(cid,list)=>{
+    const c=$(cid); c.innerHTML="";
+    list.forEach(t=>{
+      const k=`${cid}_${t}`;
+      c.insertAdjacentHTML('beforeend',`
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="${k}" value="${t}" name="${cid}">
+          <label class="form-check-label" for="${k}">${t}</label>
+        </div>`);
     });
-  }
-
-  function rebuildGenderSpecificGroups(){
-    const g = genderSel.value;
-    const organs = organCommon
-          .concat(g==="女"?organFemaleOnly:[])
-          .concat(g==="男"?organMaleOnly:[])
-          .concat("其他");
-    const diseases = diseaseCommon
-          .concat(g==="女"?diseaseFemaleOnly:[])
-          .concat(g==="男"?diseaseMaleOnly:[])
-          .concat("其他");
-    const symptoms = symptomCommon
-          .concat(g==="女"?symptomFemaleOnly:[])
-          .concat(g==="男"?symptomMaleOnly:[])
-          .concat("其他");
-
-    createCheckboxGroup("removed_organs_group", organs);
-    createCheckboxGroup("family_history_group", diseases);
-    createCheckboxGroup("personal_history_check_group", diseases);
-    createCheckboxGroup("symptoms_group", symptoms);
-
-    attachOtherInputsHandler();
-  }
-
-  const otherMap = {
-    removed_organs: "removed_organs_other_wrapper",
-    family_history: "family_other_wrapper",
-    personal_history_check: "personal_other_wrapper",
-    symptoms: "symptoms_other_wrapper",
   };
-  function attachOtherInputsHandler(){
-    Object.entries(otherMap).forEach(([key,wrapperId])=>{
-      const group = document.getElementById(`${key}_group`);
-      group.addEventListener("change",()=>{
-        const needShow=[...group.querySelectorAll('input[type="checkbox"]:checked')]
-                        .some(i=>i.value==="其他");
-        document.getElementById(wrapperId).classList.toggle("d-none",!needShow);
-      });
+
+  /* ---------- 性別變動時刷新 --------- */
+  const refreshByGender=()=>{
+    const g=$("gender").value;
+    build("removed_organs_group",[...organCommon,...(g==="女"?organF:[]),...(g==="男"?organM:[]),"其他"]);
+    const dis=[...diseaseCommon,...(g==="女"?diseaseF:[]),...(g==="男"?diseaseM:[]),"其他"];
+    build("family_history_group",dis);
+    build("personal_history_check_group",dis);
+    const sym=[...symptomCommon,...(g==="女"?symptomF:[]),...(g==="男"?symptomM:[]),"其他"];
+    build("symptoms_group",sym);
+    bindOther();
+  };
+
+  /* ---------- 其他輸入顯示 ---------- */
+  const otherWrap={removed_organs:"removed_organs_other_wrapper",family_history:"family_other_wrapper",personal_history_check:"personal_other_wrapper",symptoms:"symptoms_other_wrapper"};
+  const bindOther=()=>{            // 每次重建後重新掛
+    Object.entries(otherWrap).forEach(([key,wrap])=>{
+      const g=$(key+"_group");
+      g.onchange=()=>setDisplay(wrap,[...g.querySelectorAll('input:checked')].some(i=>i.value==="其他"));
     });
-  }
+  };
+  const setDisplay=(id,show)=>$(id).classList.toggle("d-none",!show);
 
-  ["gender","birthdate","bloodtype","client_email"].forEach(id=>{
-    document.getElementById(id).disabled = true;
-  });
-  ["removed_organs","family_history","personal_history_check","symptoms"].forEach(sid=>{
-    document.querySelectorAll(`#${sid}_group input, #${sid}_confirm`).forEach(el=>el.disabled=true);
-  });
+  /* ---------- 初始鎖定 ---------- */
+  const lockAllAfterBirth=(flag)=>{
+    setDisabled($("bloodtype"),flag);
+    setDisabled($("client_email"),flag);
+    const firstEls=[...$("removed_organs_group").querySelectorAll('input'),$("removed_organs_confirm")];
+    firstEls.forEach(e=>setDisabled(e,flag));
+    if(flag) $("submitBtn").disabled=true;
+  };
+  // disable everything initially
+  setDisabled($("gender"),true); setDisabled($("birthdate"),true); lockAllAfterBirth(true);
 
-  createCheckboxGroup("removed_organs_group",[]);
-  createCheckboxGroup("family_history_group",[]);
-  createCheckboxGroup("personal_history_check_group",[]);
-  createCheckboxGroup("symptoms_group",[]);
-  attachOtherInputsHandler();
+  build("removed_organs_group",[]); build("family_history_group",[]);
+  build("personal_history_check_group",[]); build("symptoms_group",[]); bindOther();
 
-  nameInput.addEventListener("input",()=>{
-    genderSel.disabled = nameInput.value.trim()==="";
-  });
-
-  genderSel.addEventListener("change",()=>{
-    const g = genderSel.value;
-    birthInput.disabled = !g;
-    if(g){ rebuildGenderSpecificGroups(); }
-  });
-
-  birthInput.addEventListener("input",()=>{
-    const ok = !!birthInput.value;
-    bloodSel.disabled = !ok;
-    emailInput.disabled = !ok;
-    document.querySelectorAll(`#removed_organs_group input, #removed_organs_confirm`)
-            .forEach(el=>el.disabled=!ok);
+  /* ---------- 姓名輸入 ---------- */
+  $("name").addEventListener("input",e=>{
+    const ok=e.target.value.trim().length>0;
+    setDisabled($("gender"),!ok);
+    if(!ok){ $("gender").value=""; setDisabled($("birthdate"),true); lockAllAfterBirth(true);}
   });
 
-  const steps = ["removed_organs","family_history","personal_history_check","symptoms"];
-  const selectionsData={};
-  steps.forEach((sid,idx)=>{
-    const groupElem=document.getElementById(`${sid}_group`);
-    const btn=document.getElementById(`${sid}_confirm`);
-    const display=document.getElementById(`${sid}_display`);
-    const otherWrapper=document.getElementById(otherMap[sid]);
-    const otherInput=otherWrapper?.querySelector("input")||{value:""};
-
-    btn.addEventListener("click",()=>{
-      const checked=[...groupElem.querySelectorAll('input[type="checkbox"]:checked')].map(i=>i.value);
-      if(checked.includes("其他")){
-        const extras=otherInput.value.trim().split(/[,，]/).map(s=>s.trim()).filter(Boolean);
-        checked.splice(checked.indexOf("其他"),1,...extras);
-      }
-      selectionsData[sid]=checked;
-      display.textContent=checked.length?checked.join("，"):"（未選取）";
-
-      groupElem.querySelectorAll('input[type="checkbox"]').forEach(i=>i.disabled=true);
-      btn.disabled=true; otherInput.disabled=true;
-
-      if(idx+1<steps.length){
-        const next=steps[idx+1];
-        document.querySelectorAll(`#${next}_group input, #${next}_confirm`).forEach(el=>el.disabled=false);
-      }else{
-        document.getElementById("submitBtn").disabled=false;
-      }
-    });
+  /* ---------- 性別 ---------- */
+  $("gender").addEventListener("change",()=>{
+    const chose=!!$("gender").value;
+    setDisabled($("birthdate"),!chose);
+    if(chose) refreshByGender();
+    else{ setDisabled($("birthdate"),true); lockAllAfterBirth(true);}
   });
 
-  birthInput.addEventListener("input",()=>{
-    birthInput.setCustomValidity(birthInput.value && birthInput.value<"1900-01-01"
-      ?"日期不可早於 1900-01-01":"");
-  });
+  /* ---------- 年齡驗證 ---------- */
+  const ageOK=()=>{ const v=$("birthdate").value;if(!v)return false; return ((Date.now()-new Date(v))/31557600000)>=2; };
 
-  const EMAILJS_SERVICE_ID = "drlingxiansun@gmail.com";
-  const EMAILJS_TEMPLATE_ID = "template_o3yrt3o";
-  const EMAILJS_PUBLIC_KEY = "eLWd9BxdODbpLnR43";
-  emailjs.init(EMAILJS_PUBLIC_KEY);
-
-  const confirmModal=new bootstrap.Modal("#confirmModal");
-  let finalPayload=null;
-  document.getElementById("clientForm").addEventListener("submit",e=>{
-    e.preventDefault();
-    finalPayload={
-      name: nameInput.value.trim(),
-      gender: genderSel.value,
-      birthdate: birthInput.value,
-      bloodtype: bloodSel.value,
-      client_email: emailInput.value.trim(),
-      ...selectionsData
-    };
-    document.getElementById("confirmContent").textContent=
-      JSON.stringify(finalPayload,null,2);
-    confirmModal.show();
-  });
-
-  document.getElementById("btnConfirmSend").addEventListener("click",async()=>{
-    if(!finalPayload) return;
-    try{
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID,{
-        subject:`客戶名稱 ${finalPayload.name||"客戶"} 輸入資料`,
-        to_email:"drlingxiansun@gmail.com",
-        message:JSON.stringify(finalPayload,null,2),
-        client_email: finalPayload.client_email
-      });
-      confirmModal.hide();
-      alert("資料已成功寄出，感謝填寫！");
-      location.reload();
-    }catch(err){
-      console.error(err);
-      alert("寄信失敗："+(err.text||err));
+  $("birthdate").addEventListener("input",()=>{
+    const v=$("birthdate").value;
+    if(!v){ $("birthdate").setCustomValidity(""); lockAllAfterBirth(true); return;}
+    if(!ageOK()){
+      $("birthdate").setCustomValidity("僅接受 2 歲以上填寫");
+      $("birthdate").reportValidity();
+      lockAllAfterBirth(true);
+    }else{
+      $("birthdate").setCustomValidity("");
+      lockAllAfterBirth(false);
     }
   });
+
+  /* ---------- 步驟流程 ---------- */
+  const steps=["removed_organs","family_history","personal_history_check","symptoms"], store={};
+  steps.forEach((sid,i)=>{
+    const grp=$(sid+"_group"), btn=$(sid+"_confirm"), disp=$(sid+"_display");
+    btn.onclick=()=>{
+      const checked=[...grp.querySelectorAll('input:checked')].map(x=>x.value);
+      if(checked.includes("其他")){
+        const extra=$(otherWrap[sid]).querySelector("input").value.split(/[,，]/).map(s=>s.trim()).filter(Boolean);
+        checked.splice(checked.indexOf("其他"),1,...extra);
+      }
+      store[sid]=checked; disp.textContent=checked.length?checked.join("，"):"（未選取）";
+      grp.querySelectorAll('input').forEach(x=>x.disabled=true); btn.disabled=true;
+      const nxt=steps[i+1]; if(nxt){ document.querySelectorAll(`#${nxt}_group input, #${nxt}_confirm`).forEach(el=>setDisabled(el,false)); }
+      else $("submitBtn").disabled=false;
+    };
+  });
+
+  /* ---------- EmailJS ---------- */
+  emailjs.init("eLWd9BxdODbpLnR43");
+  const SERVICE="drlingxiansun@gmail.com", TEMPLATE="template_o3yrt3o";
+  const modal=new bootstrap.Modal("#confirmModal"); let finalData=null;
+
+  $("clientForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    finalData={name:$("name").value.trim(),gender:$("gender").value,birthdate:$("birthdate").value,
+               bloodtype:$("bloodtype").value,client_email:$("client_email").value.trim(),...store};
+    $("confirmContent").textContent=JSON.stringify(finalData,null,2);
+    modal.show();
+  });
+
+  $("btnConfirmSend").onclick=async()=>{
+    if(!finalData)return;
+    try{
+      await emailjs.send(SERVICE,TEMPLATE,{
+        subject:`客戶名稱 ${finalData.name||"客戶"} 輸入資料`,
+        to_email:"drlingxiansun@gmail.com",
+        message:JSON.stringify(finalData,null,2),
+        client_email:finalData.client_email
+      });
+      modal.hide(); alert("資料已成功寄出，感謝填寫！"); location.reload();
+    }catch(err){ alert("寄信失敗："+(err.text||err)); }
+  };
+
 });
 </script>
 </body>
