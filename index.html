@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("gender").addEventListener("change",()=>{
     const chose=!!$("gender").value;
     setDisabled($("birthdate"),!chose);
-    if(chose) refreshByGender();
+    if(chose) refreshByGender();u
     else{ setDisabled($("birthdate"),true); lockAllAfterBirth(true);}
   });
 
@@ -248,8 +248,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   });
 
   /* ---------- EmailJS ---------- */
-  emailjs.init("eLWd9BxdODbpLnR43");
-  const SERVICE="drlingxiansun@gmail.com", TEMPLATE="template_o3yrt3o";
+  emailjs.init("YOUR_PUBLIC_KEY");
+  const SERVICE="drlingxiansun@gmail.com"; const TEMPLATE="template_o3yrt3o"; const EMAILJS_PUBLIC_KEY = "eLWd9BxdODbpLnR43";
   const modal=new bootstrap.Modal("#confirmModal"); let finalData=null;
 
   $("clientForm").addEventListener("submit",e=>{
