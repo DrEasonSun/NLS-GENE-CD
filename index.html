@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NLS GENE｜專屬健康評估 (科技版)</title>
 
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
     <style>
-      :root{--brand-green:#008a27;--brand-orange:#ff6a00;--header-dark:#0a233a;--header-light:#14495e;--header-gold:#f4d03f;--bg-main:#f4f9f5;--text-main:#2c3e2d;}
-      body{background:var(--bg-main);font-family:"Helvetica Neue",Arial,"Microsoft JhengHei",sans-serif;color:var(--text-main);}
-      header{background:linear-gradient(135deg,var(--header-dark),var(--header-light));color:#fff;padding:50px 40px 60px;text-align:center;border-bottom:6px solid var(--header-gold);box-shadow:0 4px 12px rgba(0,0,0,.15);}
-      .logo-text{font-size:2.4rem;font-weight:900;margin-bottom:8px}.logo-feat{color:var(--header-gold)}.logo-era{color:var(--brand-orange)}
+      :root{--green:#008a27;--orange:#ff6a00;--dark:#0a233a;--light:#14495e;--gold:#f4d03f;--bg:#f4f9f5;--txt:#2c3e2d;}
+      body{background:var(--bg);font-family:"Helvetica Neue",Arial,"Microsoft JhengHei",sans-serif;color:var(--txt);}
+      header{background:linear-gradient(135deg,var(--dark),var(--light));color:#fff;text-align:center;padding:50px 40px 60px;border-bottom:6px solid var(--gold);box-shadow:0 4px 12px rgba(0,0,0,.15);}
+      .logo-text{font-size:2.4rem;font-weight:900;margin-bottom:8px}.logo-feat{color:var(--gold)}.logo-era{color:var(--orange)}
       .container-box{max-width:960px;margin:-40px auto 60px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(10,35,58,.15);padding:45px 50px;}
-      .btn-primary{background:var(--brand-green);border-color:var(--brand-green)}.btn-primary:hover{background:#00661d;border-color:#00661d}
-      .required::after{content:" *";color:#d32f2f} footer{margin-top:40px}
-      textarea.result{font-size:.875rem;margin-top:4px}.confirm-wrap{display:flex;justify-content:flex-end}
+      .btn-primary{background:var(--green);border-color:var(--green)}.btn-primary:hover{background:#00661d;border-color:#00661d}
+      .required::after{content:" *";color:#d32f2f}
+      textarea.result{font-size:.875rem;margin-top:4px}
+      .confirm-wrap{display:flex;justify-content:flex-end}
+      .locked{background-color:#e9ecef}
       @media (max-width:575.98px){.container-box{margin:-30px 10px 30px;padding:30px 18px}}
     </style>
   </head>
@@ -26,7 +27,7 @@
     <header>
       <div class="logo-text"><span class="logo-feat">NLS</span><span class="logo-era">GENE</span></div>
       <h2 class="h4 mb-0">基因檢測健康精準評估</h2>
-      <p class="text-light">專業建模：孫苓獻醫師 TCMD/ND/PhD</p>
+      <p class="text-light">NLS建模：孫苓獻醫師 TCMD/ND/PhD</p>
     </header>
 
     <div class="container-box">
@@ -38,9 +39,7 @@
           </div>
           <div class="col-md-3">
             <label class="form-label required">性別</label>
-            <select class="form-select" name="gender" id="gender" required>
-              <option value="">--</option><option>男</option><option>女</option>
-            </select>
+            <select class="form-select" name="gender" id="gender" required><option value="">--</option><option>男</option><option>女</option></select>
           </div>
           <div class="col-md-3">
             <label class="form-label required">出生年月日</label>
@@ -52,40 +51,36 @@
             <select class="form-select" name="bloodtype"><option value="">--</option><option>A</option><option>B</option><option>AB</option><option>O</option></select>
           </div>
 
-          <!-- ========= 1. 器官摘除 ========= -->
+          <!-- 1. 器官摘除 -->
           <div class="col-12">
             <label class="form-label">曾摘除器官</label>
-            <select class="form-select" id="removed_organs" multiple size="6"></select>
-            <textarea class="form-control result" id="removed_organs_view" rows="2"></textarea>
-            <div class="confirm-wrap mt-1"><button type="button" class="btn btn-sm btn-outline-secondary" id="btn_removed_organs">確認</button></div>
-            <input type="hidden" name="removed_organs_result" id="removed_organs_hidden"/>
+            <select class="form-select" id="removed_organs" name="removed_organs" multiple size="6"></select>
+            <textarea class="form-control result" id="removed_organs_view" rows="2" readonly></textarea>
+            <div class="confirm-wrap mt-1"><button class="btn btn-sm btn-outline-secondary" type="button" id="btn_removed_organs">確認</button></div>
           </div>
 
-          <!-- ========= 2. 家族病史 ========= -->
+          <!-- 2. 家族病史 -->
           <div class="col-12">
             <label class="form-label">家族病史</label>
-            <select class="form-select" id="family_history" multiple size="6"></select>
-            <textarea class="form-control result" id="family_history_view" rows="2"></textarea>
-            <div class="confirm-wrap mt-1"><button type="button" class="btn btn-sm btn-outline-secondary" id="btn_family_history">確認</button></div>
-            <input type="hidden" name="family_history_result" id="family_history_hidden"/>
+            <select class="form-select" id="family_history" name="family_history" multiple size="6"></select>
+            <textarea class="form-control result" id="family_history_view" rows="2" readonly></textarea>
+            <div class="confirm-wrap mt-1"><button class="btn btn-sm btn-outline-secondary" type="button" id="btn_family_history">確認</button></div>
           </div>
 
-          <!-- ========= 3. 個人病史 ========= -->
+          <!-- 3. 個人病史 -->
           <div class="col-12">
             <label class="form-label">個人病史</label>
-            <select class="form-select" id="personal_history" multiple size="6"></select>
-            <textarea class="form-control result" id="personal_history_view" rows="2"></textarea>
-            <div class="confirm-wrap mt-1"><button type="button" class="btn btn-sm btn-outline-secondary" id="btn_personal_history">確認</button></div>
-            <input type="hidden" name="personal_history_result" id="personal_history_hidden"/>
+            <select class="form-select" id="personal_history" name="personal_history" multiple size="6"></select>
+            <textarea class="form-control result" id="personal_history_view" rows="2" readonly></textarea>
+            <div class="confirm-wrap mt-1"><button class="btn btn-sm btn-outline-secondary" type="button" id="btn_personal_history">確認</button></div>
           </div>
 
-          <!-- ========= 4. 自訴症狀 ========= -->
+          <!-- 4. 自訴症狀 -->
           <div class="col-12">
             <label class="form-label">自訴症狀</label>
-            <select class="form-select" id="symptoms" multiple size="6"></select>
-            <textarea class="form-control result" id="symptoms_view" rows="2"></textarea>
-            <div class="confirm-wrap mt-1"><button type="button" class="btn btn-sm btn-outline-secondary" id="btn_symptoms">確認</button></div>
-            <input type="hidden" name="symptoms_result" id="symptoms_hidden"/>
+            <select class="form-select" id="symptoms" name="symptoms" multiple size="6"></select>
+            <textarea class="form-control result" id="symptoms_view" rows="2" readonly></textarea>
+            <div class="confirm-wrap mt-1"><button class="btn btn-sm btn-outline-secondary" type="button" id="btn_symptoms">確認</button></div>
           </div>
         </div>
 
@@ -97,105 +92,102 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        /* ---------- 選項資料 ---------- */
-        // 器官：男女合共 >20，不設限
+        /* ====== 選項資料 ====== */
         const organBase=["闌尾","扁桃腺","膽囊","甲狀腺","左眼","右眼","左腎","右腎","脾臟","小腸","大腸",
                          "左上肺葉","左下肺葉","右上肺葉","右中肺葉","右下肺葉","左臂","右臂","盲腸","胰臟"];
         const organFemaleExtra=["左乳","右乳","左卵巢輸卵管","右卵巢輸卵管","子宮"];
         const organMaleExtra=["前列腺"];
 
-        // 家族/個人病史 & 症狀：常見 19 +「其他」=20
         const diseaseCommon=["糖尿病","高血壓","心臟病","高血脂","慢性肝病","慢性腎病","中風","癌症","自體免疫病",
                              "氣喘","過敏性鼻炎","憂鬱症","骨質疏鬆","失智症","痛風","胃潰瘍","肥胖","肝硬化","偏頭痛"];
         const symptomCommon=["疲勞","失眠","頭痛","眩暈","背痛","關節痛","便秘","腹瀉","胃脹氣",
                              "皮膚乾癢","過敏","情緒低落","焦慮","手腳冰冷","心悸","呼吸急促","口乾","肌肉痠痛","體重變化"];
-
         const extra="其他";
 
-        const mapping=[
-          {key:"removed_organs", label:"曾摘除器官"},
-          {key:"family_history", label:"家族病史"},
-          {key:"personal_history", label:"個人病史"},
-          {key:"symptoms", label:"自訴症狀"}
+        const blocks=[
+          {id:"removed_organs",   label:"曾摘除器官"},
+          {id:"family_history",   label:"家族病史"},
+          {id:"personal_history", label:"個人病史"},
+          {id:"symptoms",         label:"自訴症狀"}
         ];
 
         const genderSel=document.getElementById("gender");
         const confirmState={};
 
-        function renderOptions(){
-          const gender=genderSel.value;
-          // 器官
+        function populate(){
+          const g=genderSel.value;
+
+          // 1) 器官
           const organSel=document.getElementById("removed_organs");
           organSel.innerHTML="";
           let organs=[...organBase];
-          if(gender==="女")organs=[...organs,...organFemaleExtra];
-          if(gender==="男")organs=[...organs,...organMaleExtra];
-          organs.forEach(v=>{const o=new Option(v,v);organSel.add(o);});
-          // 重置狀態
-          resetBlock("removed_organs");
+          if(g==="女") organs.push(...organFemaleExtra);
+          if(g==="男") organs.push(...organMaleExtra);
+          organs.forEach(item=>organSel.add(new Option(item,item)));
+          reset("removed_organs");
 
-          // 疾病 & 症狀
+          // 2) 病史 (家族/個人)
           ["family_history","personal_history"].forEach(id=>{
             const sel=document.getElementById(id);
             sel.innerHTML="";
-            diseaseCommon.forEach(v=>sel.add(new Option(v,v)));
+            diseaseCommon.forEach(d=>sel.add(new Option(d,d)));
             sel.add(new Option(extra,extra));
-            resetBlock(id);
+            reset(id);
           });
+
+          // 3) 症狀
           const symSel=document.getElementById("symptoms");
           symSel.innerHTML="";
-          symptomCommon.forEach(v=>symSel.add(new Option(v,v)));
+          symptomCommon.forEach(s=>symSel.add(new Option(s,s)));
           symSel.add(new Option(extra,extra));
-          resetBlock("symptoms");
+          reset("symptoms");
         }
 
-        function resetBlock(id){
+        function reset(id){
           confirmState[id]=false;
-          document.getElementById(id).disabled=false;
-          document.getElementById(id+"_view").readOnly=false;
-          document.getElementById(id+"_view").value="";
-          document.getElementById(id+"_hidden").value="";
           document.getElementById("btn_"+id).textContent="確認";
+          document.getElementById(id+"_view").value="";
+          document.getElementById(id+"_view").classList.remove("locked");
         }
 
-        genderSel.addEventListener("change",renderOptions);
-        renderOptions();
+        genderSel.addEventListener("change",populate);
+        populate();
 
-        // 即時同步 textarea
-        mapping.forEach(({key})=>{
-          document.getElementById(key).addEventListener("change",()=>{
-            const vals=[...document.getElementById(key).selectedOptions].map(o=>o.value);
-            document.getElementById(key+"_view").value=vals.join("，");
-          });
-          // 確認/重新編輯
-          document.getElementById("btn_"+key).addEventListener("click",()=>{
-            const sel=document.getElementById(key);
-            const view=document.getElementById(key+"_view");
-            const hid=document.getElementById(key+"_hidden");
-            const btn=document.getElementById("btn_"+key);
-            if(!confirmState[key]){
-              hid.value=view.value;
-              sel.disabled=true;view.readOnly=true;
-              confirmState[key]=true;btn.textContent="重新編輯";
+        /* 共用：同步 textarea */
+        blocks.forEach(({id})=>{
+          document.getElementById(id).addEventListener("change",()=>syncView(id));
+
+          document.getElementById("btn_"+id).addEventListener("click",()=>{
+            if(!confirmState[id]){
+              syncView(id);
+              document.getElementById(id+"_view").classList.add("locked");
+              confirmState[id]=true;
+              document.getElementById("btn_"+id).textContent="重新編輯";
             }else{
-              sel.disabled=false;view.readOnly=false;
-              hid.value="";confirmState[key]=false;btn.textContent="確認";
+              confirmState[id]=false;
+              document.getElementById("id").focus;
+              document.getElementById(id+"_view").classList.remove("locked");
+              document.getElementById("btn_"+id).textContent="確認";
             }
           });
         });
 
-        /* ---------- EmailJS ---------- */
+        function syncView(id){
+          const sel=document.getElementById(id);
+          const list=[...sel.selectedOptions].map(o=>o.value);
+          document.getElementById(id+"_view").value=list.join("，");
+        }
+
+        /* EmailJS */
         emailjs.init("eLWd9BxdODbpLnR43");
         document.getElementById("clientForm").addEventListener("submit",e=>{
           e.preventDefault();
-          for(const {key,label} of mapping){
-            if(!confirmState[key]){alert("請先確認「"+label+"」區塊");return;}
-          }
-          const btn=e.target.querySelector("button[type='submit']");
-          btn.disabled=true;
+          for(const {id,label} of blocks){if(!confirmState[id]){alert("請先確認「"+label+"」");return;}}
+          const btn=e.target.querySelector("button[type='submit']");btn.disabled=true;
+
           emailjs.sendForm("drlingxiansun@gmail.com","template_o3yrt3o","#clientForm")
-            .then(()=>{alert("已送出！");e.target.reset();renderOptions();btn.disabled=false;})
-            .catch(err=>{alert("寄信失敗");btn.disabled=false;console.error(err);});
+            .then(()=>{alert("已送出！");e.target.reset();populate();btn.disabled=false;})
+            .catch(err=>{alert("寄信失敗");console.error(err);btn.disabled=false;});
         });
       });
     </script>
